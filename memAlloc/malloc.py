@@ -94,6 +94,19 @@ def worst_fit(processes, blocks):
                 break
     plot(memory, blocks, "Worst Fit")
 
+def next_fit(processes, blocks):
+    memSize = sum([block.size for block in blocks])
+    memory = ["unallocated" for i in range(memSize)]
+    
+    index = 0
+    for process in processes:
+        for i in range(len(blocks)):
+            index = (index + 1) % len(blocks)
+            if blocks[index - 1].free > process.size and blocks[index - 1].free == blocks[index - 1].size:
+                blocks[index - 1].load(process, memory)
+                break
+    plot(memory, blocks, "Next Fit")
+
 
 
 global colors
@@ -103,10 +116,11 @@ colors = {
     }
 
 
-blocks = [5, 10, 15, 10]
+# blocks = [100, 50, 30, 120, 35]
+blocks = [8, 16, 8, 4]
 
 processes = [
-    Process("P1", 6),
+    Process("P1", 14),
     Process("P2", 4),
     Process("P3", 7),
     Process("P4", 2),
@@ -127,5 +141,7 @@ blocks = blocks[len(blocks)//2:]
 first_fit(processes, blocks)
 best_fit(processes, blocks)
 worst_fit(processes, blocks)
+next_fit(processes, blocks)
+plot([], blocks, "Memory")
 
 plt.show()
