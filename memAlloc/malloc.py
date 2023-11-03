@@ -75,9 +75,9 @@ def best_fit(processes, blocks):
     memory = ["unallocated" for i in range(memSize)]
 
     for process in processes:
-        blocks.sort(key = lambda block: block.size - process.size)
+        blocks.sort(key = lambda block: abs(block.size - process.size))
         for block in blocks:
-            if block.free > process.size and block.free == block.size:
+            if block.free >= process.size and block.free == block.size:
                 block.load(process, memory)
                 break
     plot(memory, blocks, "Best Fit")
@@ -87,9 +87,9 @@ def worst_fit(processes, blocks):
     memory = ["unallocated" for i in range(memSize)]
 
     for process in processes:
-        blocks.sort(key = lambda block: -(block.size - process.size))
+        blocks.sort(key = lambda block: -abs(block.size - process.size))
         for block in blocks:
-            if block.free > process.size and block.free == block.size:
+            if block.free >= process.size and block.free == block.size:
                 block.load(process, memory)
                 break
     plot(memory, blocks, "Worst Fit")
@@ -102,7 +102,7 @@ def next_fit(processes, blocks):
     for process in processes:
         for i in range(len(blocks)):
             index = (index + 1) % len(blocks)
-            if blocks[index - 1].free > process.size and blocks[index - 1].free == blocks[index - 1].size:
+            if blocks[index - 1].free >= process.size and blocks[index - 1].free == blocks[index - 1].size:
                 blocks[index - 1].load(process, memory)
                 break
     plot(memory, blocks, "Next Fit")
@@ -117,13 +117,14 @@ colors = {
 
 
 # blocks = [100, 50, 30, 120, 35]
-blocks = [8, 16, 8, 4]
+blocks = [4, 8, 8, 16, 32]
 
 processes = [
-    Process("P1", 14),
-    Process("P2", 4),
-    Process("P3", 7),
-    Process("P4", 2),
+    Process("P1", 5),
+    Process("P2", 3),
+    Process("P3", 16),
+    Process("P4", 10),
+    Process("P5", 8),
 ]
 
 # blocks[0] = Block(blocks[0], 0)
@@ -139,9 +140,9 @@ blocks = blocks[len(blocks)//2:]
 # [process.info() for process in processes]
 
 first_fit(processes, blocks)
-best_fit(processes, blocks)
-worst_fit(processes, blocks)
 next_fit(processes, blocks)
+best_fit(processes, blocks[:])
+worst_fit(processes, blocks[:])
 plot([], blocks, "Memory")
 
 plt.show()
