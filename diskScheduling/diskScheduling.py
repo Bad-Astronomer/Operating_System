@@ -121,7 +121,7 @@ def clook(requests, head):
 # requests = [55, 58, 39, 18, 90, 160, 150, 38, 184]
 requests = [98, 183, 37, 122, 14, 124, 65, 67]
 # requests = [82, 170, 43, 140, 24, 16, 190]
-start = 98
+start = 100
 
 fifo(requests[:], start)
 sstf(requests[:], start)
